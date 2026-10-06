@@ -1,5 +1,9 @@
 <?php
 
+// Sembunyikan peringatan Deprecated (PHP 8.5) agar tidak tampil di halaman
+error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
+ini_set('display_errors', '0');
+
 use Illuminate\Http\Request;
 
 define('LARAVEL_START', microtime(true));
