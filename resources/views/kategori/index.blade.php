@@ -1,47 +1,58 @@
+@php
+    $cover = [
+        'linear-gradient(135deg,#4C1D95,#7C3AED)',
+        'linear-gradient(135deg,#0369A1,#0EA5E9)',
+        'linear-gradient(135deg,#047857,#10B981)',
+        'linear-gradient(135deg,#B45309,#F59E0B)',
+        'linear-gradient(135deg,#BE185D,#EC4899)',
+        'linear-gradient(135deg,#B91C1C,#F97316)',
+    ];
+@endphp
+
 <x-layout title="Daftar Kategori">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h3 class="text-del mb-0">Daftar Kategori</h3>
-        <a href="{{ route('kategori.create') }}" class="btn btn-del">+ Tambah Kategori</a>
-    </div>
-
-    <div class="card shadow-sm">
-        <div class="table-responsive">
-            <table class="table table-hover mb-0 align-middle">
-                <thead class="table-light">
-                    <tr>
-                        <th>Kode</th>
-                        <th>Nama Kategori</th>
-                        <th>Jumlah Buku</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($kategoris as $kategori)
-                        <tr>
-                            <td>{{ $kategori->kode_kategori }}</td>
-                            <td>{{ $kategori->nama_kategori }}</td>
-                            <td>{{ $kategori->bukus_count }}</td>
-                            <td>
-                                <div class="d-flex gap-1">
-                                    <a href="{{ route('kategori.show', $kategori) }}" class="btn btn-sm btn-info">Detail</a>
-                                    <a href="{{ route('kategori.edit', $kategori) }}" class="btn btn-sm btn-warning">Edit</a>
-                                    <form action="{{ route('kategori.destroy', $kategori) }}" method="POST" onsubmit="return confirm('Hapus kategori ini beserta seluruh bukunya?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button class="btn btn-sm btn-danger">Hapus</button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="4" class="text-center text-muted py-4">Belum ada data kategori.</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
+    <div class="hero d-flex flex-wrap justify-content-between align-items-center gap-3">
+        <div>
+            <h2><i class="bi bi-tags-fill me-2"></i>Kategori Buku</h2>
+            <p>Kelompokkan koleksi perpustakaan agar mudah ditemukan.</p>
+            <span class="hero-stat"><i class="bi bi-grid-fill"></i>{{ $kategoris->total() }} kategori</span>
         </div>
+        <a href="{{ route('kategori.create') }}" class="btn btn-hero"><i class="bi bi-plus-circle-fill me-2"></i>Tambah Kategori</a>
     </div>
 
-    <div class="mt-3">{{ $kategoris->links() }}</div>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+        @forelse($kategoris as $kategori)
+            <div class="col">
+                <div class="book-card h-100">
+                    <div class="cover" style="background: {{ $cover[$kategori->id % count($cover)] }}; min-height: 150px;">
+                        <i class="bi bi-collection-fill cover-icon"></i>
+                        <div class="cover-top">
+                            <span class="chip">{{ $kategori->kode_kategori }}</span>
+                            <span class="stok-chip stok-ok"><i class="bi bi-book-fill me-1"></i>{{ $kategori->bukus_count }} buku</span>
+                        </div>
+                        <h5 class="cover-title" style="margin-top: 2.5rem;">{{ $kategori->nama_kategori }}</h5>
+                    </div>
+                    <div class="book-body">
+                        <div class="actions">
+                            <a href="{{ route('kategori.show', $kategori) }}" class="btn-detail"><i class="bi bi-eye-fill me-1"></i>Detail</a>
+                            <a href="{{ route('kategori.edit', $kategori) }}" class="btn-icon btn-edit" title="Edit"><i class="bi bi-pencil-fill"></i></a>
+                            <form action="{{ route('kategori.destroy', $kategori) }}" method="POST" onsubmit="return confirm('Hapus kategori ini beserta seluruh bukunya?')">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn-icon btn-remove" title="Hapus"><i class="bi bi-trash-fill"></i></button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @empty
+            <div class="col-12">
+                <div class="empty-state">
+                    <i class="bi bi-inbox display-3 d-block mb-3"></i>
+                    <h5>Belum ada data kategori</h5>
+                </div>
+            </div>
+        @endforelse
+    </div>
+
+    <div class="mt-4">{{ $kategoris->links() }}</div>
 </x-layout>

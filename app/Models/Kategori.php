@@ -10,7 +10,7 @@ class Kategori extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['kode_kategori', 'nama_kategori'];
+    protected $fillable = ['kode_kategori', 'nama_kategori', 'bidang'];
 
     public function bukus(): HasMany
     {
