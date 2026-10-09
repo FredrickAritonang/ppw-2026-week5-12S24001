@@ -12,6 +12,7 @@ return new class extends Migration
             $table->id();
             $table->string('kode_kategori', 10)->unique();
             $table->string('nama_kategori', 100);
+            $table->string('bidang', 40)->nullable()->index();
             $table->timestamps();
         });
     }

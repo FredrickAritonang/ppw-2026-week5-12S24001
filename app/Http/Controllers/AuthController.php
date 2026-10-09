@@ -42,7 +42,7 @@ class AuthController extends Controller
         }
 
         return back()
-            ->withErrors(['username' => 'Username atau password salah. Password semua akun: PustakaDel2026'])
+            ->withErrors(['username' => 'Username atau password salah.'])
             ->onlyInput('username');
     }
 
