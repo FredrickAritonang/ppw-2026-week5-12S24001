@@ -34,7 +34,7 @@ class DashboardController extends Controller
                 ['Usulan Menunggu', Usulan::where('status', 'menunggu')->count(), 'bi-lightbulb-fill', $g['oranye'], 'usulan.index'],
                 ['Bebas Pustaka Diajukan', BebasPustaka::where('status', 'diajukan')->count(), 'bi-patch-check-fill', $g['hijau'], 'bebas-pustaka.index'],
             ],
-            'staf_it' => [
+            'staf_akademik' => [
                 ['Total Pengguna', User::count(), 'bi-people-fill', $g['ungu'], 'pengguna.index'],
                 ['Total Buku', Buku::count(), 'bi-book-fill', $g['biru'], 'buku.index'],
                 ['Total Kategori', Kategori::count(), 'bi-tags-fill', $g['oranye'], 'kategori.index'],

@@ -133,7 +133,7 @@ class SirkulasiController extends Controller
     public function riwayat(Request $request)
     {
         $user = Auth::user();
-        $staf = in_array($user->role, ['pustakawan', 'staf_it']);
+        $staf = in_array($user->role, ['pustakawan', 'staf_akademik']);
 
         $riwayat = Peminjaman::with(['buku.kategori', 'user'])
             ->when(! $staf, fn ($q) => $q->where('user_id', $user->id))

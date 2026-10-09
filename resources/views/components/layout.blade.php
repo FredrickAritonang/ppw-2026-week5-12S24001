@@ -32,6 +32,10 @@
         .side-link i { font-size:1.05rem; width:1.3rem; text-align:center; flex-shrink:0; }
         .side-link:hover { background:rgba(255,255,255,.06); color:#fff; }
         .side-link.active { background:rgba(124,58,237,.28); color:#fff; border-left-color:#A78BFA; font-weight:600; }
+        .side-sub { background:rgba(0,0,0,.2); }
+        .side-sub .side-link { padding-left:2.9rem; font-size:.85rem; }
+        .chev { font-size:.8rem !important; transition:.2s; }
+        [aria-expanded="true"] > .chev { transform:rotate(180deg); }
 
         @media (min-width:992px) {
             html.collapsed { --sidew:76px; }
@@ -41,6 +45,7 @@
             html.collapsed .side-role { justify-content:center; margin:.9rem .6rem .2rem; padding:.6rem 0; }
             html.collapsed .side-link { justify-content:center; padding:.95rem 0; gap:0; }
             html.collapsed .side-link i { font-size:1.3rem; }
+            html.collapsed .side-sub .side-link { padding-left:0; }
             html.collapsed .side-label { font-size:0; padding:.7rem 1rem .3rem; }
             html.collapsed .side-label::after { content:''; display:block; border-top:1px solid rgba(255,255,255,.14); }
         }
@@ -80,8 +85,8 @@
         .panel-box h6 { color:var(--del); font-weight:700; border-bottom:2px solid var(--del-soft); padding-bottom:.6rem; margin-bottom:.9rem; }
         .info-row { display:flex; justify-content:space-between; gap:1rem; padding:.5rem 0; border-bottom:1px dashed #E9E4F5; font-size:.85rem; }
         .info-row:last-child { border-bottom:0; }
-        .info-row span:first-child { color:#8b84a3; }
-        .info-row span:last-child { font-weight:600; text-align:right; }
+        .info-row span:first-child { color:#8b84a3; flex-shrink:0; }
+        .info-row span:last-child { font-weight:600; text-align:right; min-width:0; overflow-wrap:anywhere; }
 
         /* ===== Sampul buku ===== */
         .cover-box { position:relative; aspect-ratio:2/3; border-radius:.3rem .65rem .65rem .3rem; overflow:hidden; box-shadow:0 12px 26px rgba(30,21,53,.35), 0 2px 4px rgba(0,0,0,.2); container-type:inline-size; background:#4C1D95; flex-shrink:0; }
@@ -90,7 +95,7 @@
         .cover-box img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; background:#fff; z-index:2; }
         .cf { position:absolute; inset:0; padding:12cqw 9cqw 9cqw 14cqw; display:flex; flex-direction:column; color:#fff; }
         .cf-top { font-size:5.2cqw; letter-spacing:.14em; text-transform:uppercase; opacity:.85; font-weight:600; }
-        .cf-title { font-size:10.5cqw; font-weight:800; line-height:1.15; margin-top:10cqw; display:-webkit-box; -webkit-line-clamp:5; -webkit-box-orient:vertical; overflow:hidden; text-shadow:0 2px 6px rgba(0,0,0,.3); }
+        .cf-title { font-size:9cqw; overflow-wrap:anywhere; font-weight:800; line-height:1.15; margin-top:10cqw; display:-webkit-box; -webkit-line-clamp:5; -webkit-box-orient:vertical; overflow:hidden; text-shadow:0 2px 6px rgba(0,0,0,.3); }
         .cf-line { width:18cqw; height:1cqw; background:rgba(255,255,255,.85); margin:7cqw 0; }
         .cf-author { font-size:6.2cqw; font-weight:600; }
         .cf-pub { margin-top:auto; font-size:4.8cqw; opacity:.8; }
@@ -118,7 +123,7 @@
         .badge-st { display:inline-block; padding:.28rem .75rem; border-radius:50rem; font-size:.74rem; font-weight:600; }
         .st-ok { background:#DCFCE7; color:#166534; } .st-warn { background:#FEF3C7; color:#92400E; } .st-bad { background:#FEE2E2; color:#991B1B; } .st-info { background:#E0F2FE; color:#0369A1; } .st-grey { background:#EEE; color:#555; }
 
-        /* Gaya halaman Kelola (lama) */
+        /* Gaya halaman Kelola */
         .hero { position:relative; overflow:hidden; border-radius:1.5rem; padding:2.2rem 2.4rem; margin-bottom:2rem; color:#fff; background:linear-gradient(120deg,var(--del-dark),var(--del) 45%,#7C3AED); box-shadow:0 14px 34px rgba(76,29,149,.30); }
         .hero::before { content:''; position:absolute; width:320px; height:320px; border-radius:50%; background:rgba(255,255,255,.08); right:-70px; top:-120px; }
         .hero > * { position:relative; z-index:1; } .hero h2 { font-weight:800; margin:0; } .hero p { margin:.3rem 0 0; opacity:.85; }
@@ -182,10 +187,32 @@
 
         @foreach($seksi as $s)
             <div class="side-label">{{ $s['label'] }}</div>
-            @foreach($s['items'] as [$label, $icon, $rute, $pola])
-                <a href="{{ route($rute) }}" class="side-link {{ request()->is(...$pola) ? 'active' : '' }}" title="{{ $label }}">
-                    <i class="bi {{ $icon }}"></i><span class="side-text">{{ $label }}</span>
-                </a>
+            @foreach($s['items'] as $it)
+                @php
+                    [$label, $icon, $rute, $pola] = $it;
+                    $anak = $it[4] ?? null;
+                @endphp
+                @if($anak)
+                    @php
+                        $buka = collect($anak)->contains(fn ($c) => request()->is(...$c[3]));
+                        $idSub = 'sub-'.$loop->parent->index.'-'.$loop->index;
+                    @endphp
+                    <a href="#{{ $idSub }}" class="side-link {{ $buka ? 'active' : '' }}" data-bs-toggle="collapse" aria-expanded="{{ $buka ? 'true' : 'false' }}" title="{{ $label }}">
+                        <i class="bi {{ $icon }}"></i><span class="side-text">{{ $label }}</span>
+                        <i class="bi bi-chevron-down ms-auto side-text chev"></i>
+                    </a>
+                    <div class="collapse side-sub {{ $buka ? 'show' : '' }}" id="{{ $idSub }}">
+                        @foreach($anak as [$l2, $i2, $r2, $p2])
+                            <a href="{{ route($r2) }}" class="side-link {{ request()->is(...$p2) ? 'active' : '' }}" title="{{ $l2 }}">
+                                <i class="bi {{ $i2 }}"></i><span class="side-text">{{ $l2 }}</span>
+                            </a>
+                        @endforeach
+                    </div>
+                @else
+                    <a href="{{ route($rute) }}" class="side-link {{ request()->is(...$pola) ? 'active' : '' }}" title="{{ $label }}">
+                        <i class="bi {{ $icon }}"></i><span class="side-text">{{ $label }}</span>
+                    </a>
+                @endif
             @endforeach
         @endforeach
     </aside>
@@ -240,6 +267,7 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end shadow border-0">
                         <li><h6 class="dropdown-header">{{ $pengguna->username }}</h6></li>
+                        <li><a class="dropdown-item" href="{{ route('profil.index') }}"><i class="bi bi-person-fill me-2"></i>Data Diri</a></li>
                         <li>
                             <form method="POST" action="{{ route('logout') }}">@csrf
                                 <button class="dropdown-item text-danger"><i class="bi bi-box-arrow-right me-2"></i>Keluar</button>

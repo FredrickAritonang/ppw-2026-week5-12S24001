@@ -34,9 +34,14 @@
 
         <form method="POST" action="{{ route('login.proses') }}">
             @csrf
-            <label class="lbl" for="username">Username</label>
-            <input type="text" id="username" name="username" value="{{ old('username') }}" class="form-control @error('username') is-invalid @enderror" autocomplete="username" autofocus required>
+            <label class="lbl" for="username">Username atau Nama</label>
+            <input type="text" id="username" name="username" list="daftarAkun" value="{{ old('username') }}" class="form-control @error('username') is-invalid @enderror" placeholder="mis. chandropardede atau Chandro Pardede" autocomplete="off" autofocus required>
             @error('username')<div class="invalid-feedback">{{ $message }}</div>@enderror
+            <datalist id="daftarAkun">
+                @foreach($akunSaran as $a)
+                    <option value="{{ $a->username }}">{{ $a->name }}</option>
+                @endforeach
+            </datalist>
 
             <label class="lbl" for="password">Password</label>
             <div class="input-group">
@@ -55,10 +60,11 @@
 
         <div class="demo">
             <div class="text-muted mb-1"><i class="bi bi-info-circle me-1"></i>Akun demo, klik untuk mengisi username dan password:</div>
-            <button type="button" data-u="iss24001" data-p="MejaBacaDel">Mahasiswa</button>
-            <button type="button" data-u="adelinamanurung" data-p="DosenSainsDel">Dosen</button>
-            <button type="button" data-u="jesichaulinahutabarat" data-p="KepalaPustakaDel">Pegawai Perpustakaan</button>
-            <button type="button" data-u="stafakademik1" data-p="AkademikDelKita">Staf Akademik</button>
+            <button type="button" data-u="iss24001">Mahasiswa</button>
+            <button type="button" data-u="chandropardede">Dosen</button>
+            <button type="button" data-u="jesichaulinahutabarat">Pegawai Perpustakaan</button>
+            <button type="button" data-u="stafakademik1">Staf Akademik</button>
+            <div class="text-muted mt-2">Semua dosen dan pegawai bisa masuk dengan username (nama tanpa gelar dan spasi) atau nama lengkap. Ketik nama untuk melihat saran. Password semua akun: <b>PustakaDel2026</b></div>
         </div>
     </div>
 
@@ -66,7 +72,7 @@
         document.querySelectorAll('.demo button').forEach(function (b) {
             b.addEventListener('click', function () {
                 document.getElementById('username').value = b.dataset.u;
-                document.getElementById('password').value = b.dataset.p;
+                document.getElementById('password').value = 'PustakaDel2026';
             });
         });
         document.getElementById('tglPw').addEventListener('click', function () {
