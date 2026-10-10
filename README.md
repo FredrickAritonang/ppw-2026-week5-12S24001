@@ -28,29 +28,14 @@ composer install
 copy .env.example .env
 php artisan key:generate
 ```
-Buat database MySQL kosong (contoh `week5`), lalu sesuaikan `DB_CONNECTION`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD` di `.env`. Setelah itu:
+Buat database MySQL kosong (contoh `week5`), lalu sesuaikan `DB_CONNECTION`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD` di `.env`.
+
+### Jalankan aplikasi
 ```bash
 php artisan migrate:fresh --seed
 php artisan serve
 ```
-Buka http://127.0.0.1:8000
-
-### Alamat lokal yang lebih rapi (opsional)
-Agar aplikasi dapat dibuka di http://sipus-del.test:8000:
-
-1. Tambahkan `127.0.0.1 sipus-del.test` ke `C:\Windows\System32\drivers\etc\hosts` (jalankan editor atau PowerShell sebagai Administrator).
-2. Tambahkan tiga baris ini di `.env`, lalu jalankan `php artisan config:clear`:
-```env
-   APP_URL=http://sipus-del.test:8000
-   SERVER_HOST=sipus-del.test
-   SERVER_PORT=8000
-```
-3. Jalankan server seperti biasa:
-```bash
-   php artisan serve
-```
-
-File `.env.example` tetap memakai alamat `127.0.0.1:8000` agar `php artisan serve` biasa berjalan untuk siapa pun yang meng-clone repositori.
+Buka **http://sipus-del.test:8000**
 
 ## Bukti Audit SQL (Eager Loading, tanpa N+1)
 Setiap kueri pada request web dicatat oleh `DB::listen` di `AppServiceProvider` dengan awalan `[SQL AUDIT]`.
