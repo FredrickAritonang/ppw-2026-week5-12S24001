@@ -17,7 +17,7 @@ class BukuFactory extends Factory
     {
         return [
             'isbn' => fake()->unique()->isbn13(),
-            'judul' => ucwords(fake()->words(rand(2, 5), true)),
+            'judul' => ucwords(fake()->words(rand(3, 5), true)),
             'penulis' => $this->faker->name(),
             'penerbit' => fake()->randomElement($this->penerbit),
             'tahun_terbit' => fake()->numberBetween(2005, 2025),

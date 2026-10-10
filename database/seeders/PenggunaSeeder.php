@@ -237,7 +237,7 @@ TXT;
             User::create([
                 'name' => $nama,
                 'username' => $username,
-                'email' => $username.'@del.ac.id',
+                'email' => $username.($role === 'mahasiswa' ? '@students.del.ac.id' : '@del.ac.id'),
                 'role' => $role,
                 'password' => self::PASSWORD,
             ] + ProfilContoh::untuk($username, $role, $nama));
@@ -245,10 +245,11 @@ TXT;
             $csv[] = '"'.$username.'","'.self::PASSWORD.'","'.$role.'","'.str_replace('"', '', $nama).'"';
         };
 
-        // Mahasiswa: iss24001 - iss24058
-        for ($i = 1; $i <= 58; $i++) {
-            $nama = $i === 1 ? 'Fredrick Laurensius Aritonang' : fake()->name();
-            $buat($nama, sprintf('iss24%03d', $i), 'mahasiswa');
+        // Mahasiswa dari database/data/mahasiswa.csv (NIM 12S24xxx -> username iss24xxx)
+        $baris = file(database_path('data/mahasiswa.csv'), FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        foreach (array_slice($baris, 1) as $b) {
+            [$nim, $nama] = explode(',', $b, 2);
+            $buat(trim($nama), 'iss'.substr(trim($nim), 3), 'mahasiswa');
         }
 
         // Dosen
