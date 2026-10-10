@@ -22,7 +22,7 @@ Dibuat dengan Laravel 11 (arsitektur MVC), Eloquent ORM, Blade, dan Bootstrap 5.
 
 ## Instalasi
 ```bash
-git clone https://github.com/<username>/ppw-2026-week5-12S24001.git
+git clone https://github.com/FredrickAritonang/ppw-2026-week5-12S24001.git
 cd ppw-2026-week5-12S24001
 composer install
 copy .env.example .env
