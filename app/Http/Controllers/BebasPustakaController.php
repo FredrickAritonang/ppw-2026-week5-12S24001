@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BebasPustaka;
 use App\Models\Notifikasi;
+use App\Models\Peminjaman;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,9 +15,22 @@ class BebasPustakaController extends Controller
         $user = Auth::user();
 
         if ($user->role === 'pustakawan') {
+            $pengajuan = BebasPustaka::with('user')->latest()->latest('id')->paginate(10);
+            $ids = $pengajuan->pluck('user_id')->unique();
+
+            // Hitung semua syarat sekaligus (tanpa N+1) agar View tidak menjalankan kueri
+            $aktifMap = Peminjaman::aktif()->whereIn('user_id', $ids)->get()
+                ->groupBy('user_id')->map->count();
+
+            $dendaMap = Peminjaman::berdenda()->whereIn('user_id', $ids)
+                ->where('denda_lunas', false)->get()
+                ->groupBy('user_id')->map(fn ($g) => (int) $g->sum('total_denda'));
+
             return view('bebas-pustaka.index', [
                 'mode' => 'staf',
-                'pengajuan' => BebasPustaka::with('user')->latest()->latest('id')->paginate(10),
+                'pengajuan' => $pengajuan,
+                'aktifMap' => $aktifMap,
+                'dendaMap' => $dendaMap,
             ]);
         }
 

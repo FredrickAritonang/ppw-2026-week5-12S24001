@@ -37,7 +37,11 @@
         <div class="panel-box">
             <h6>Pengajuan Bebas Pustaka</h6>
             @forelse($pengajuan as $r)
-                @php $a = $r->user; $aktifA = $a->pinjamanAktif(); $dendaA = $a->dendaBelumLunas(); @endphp
+                @php
+                    $a = $r->user;
+                    $aktifA = $aktifMap[$r->user_id] ?? 0;
+                    $dendaA = $dendaMap[$r->user_id] ?? 0;
+                @endphp
                 <div class="loan-row">
                     <div class="flex-grow-1" style="min-width:220px">
                         <div class="fw-semibold">{{ $a->name }} <span class="text-muted small">({{ $a->username }})</span></div>
