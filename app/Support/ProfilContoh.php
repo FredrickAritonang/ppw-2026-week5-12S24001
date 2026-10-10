@@ -19,8 +19,8 @@ class ProfilContoh
 
         return match ($role) {
             'mahasiswa' => [
-                'nomor_induk' => '12S24'.substr($username, -3),
-                'prodi' => self::PRODI['SI'],
+                'nomor_induk' => strtoupper('12s'.substr($username, 3)),
+                'prodi' => 'S1 Sistem Informasi',
                 'status_kerja' => 'Aktif',
                 'telepon' => $telepon,
             ],

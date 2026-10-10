@@ -7,8 +7,9 @@
             ['Status Ikatan Kerja', $u->status_kerja], ['Username', $u->username], ['Email', $u->email], ['Telepon', $u->telepon],
         ],
         'mahasiswa' => [
-            ['Nama', $u->name], ['NIM', $u->nomor_induk], ['Prodi', $u->prodi], ['Angkatan', '2024'],
-            ['Status', $u->status_kerja], ['Username', $u->username], ['Email', $u->email], ['Telepon', $u->telepon],
+            ['Nama', $u->name], ['NIM', $u->nomor_induk], ['Status Akhir', $u->status_kerja],
+            ['Angkatan', '20'.substr($u->username, 3, 2)], ['User Name', $u->username],
+            ['Email Akademik', $u->email], ['Program Studi', $u->prodi],
         ],
         default => [
             ['Nama', $u->name], ['ID Pegawai', $u->nomor_induk], ['Unit', $u->prodi], ['Jabatan', $u->jabatan],
@@ -47,7 +48,9 @@
                         <tr><th>{{ $k }}</th><td>{{ $v ?: '-' }}</td></tr>
                     @endforeach
                 </table>
-                <small class="text-muted d-block mt-3"><i class="bi bi-info-circle me-1"></i>Data kepegawaian pada halaman ini adalah data contoh untuk demo, bukan data resmi.</small>
+                @if($dosen)
+                    <small class="text-muted d-block mt-3"><i class="bi bi-info-circle me-1"></i>NUPTK, NIDN, golongan, dan jabatan adalah data contoh. Prodi diambil dari data CIS.</small>
+                @endif
             </div>
 
             @if($dosen)
