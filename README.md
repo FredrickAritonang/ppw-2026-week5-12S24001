@@ -37,6 +37,32 @@ php artisan serve
 ```
 Buka **http://sipus-del.test:8000**
 
+## Akun Demo (Login)
+Seluruh akun dibuat otomatis oleh `PenggunaSeeder` saat `php artisan migrate:fresh --seed`.
+
+**Password untuk semua akun: `PustakaDel2026`**
+
+Username diisi di kolom **Username** pada halaman login. Kolom itu juga menerima nama lengkap akun.
+
+| Peran | Cara menentukan username | Contoh username |
+|---|---|---|
+| Mahasiswa | `iss` + 5 digit terakhir NIM (NIM `12S24001` menjadi `iss24001`) | `iss24001` |
+| Dosen | nama tanpa gelar, huruf kecil, tanpa spasi atau titik | pilih dari saran di kolom username |
+| Pegawai Perpustakaan (pustakawan) | nama tanpa gelar, huruf kecil, tanpa spasi | `jesichaulinahutabarat`, `enjelinalimbong`, `yuliasaritripena`, `tiurmalumbangaol` |
+| Staf Akademik | `stafakademik` + nomor | `stafakademik1`, `stafakademik2` |
+
+Hak akses tiap peran:
+- **Mahasiswa**: mencari katalog dan membaca e-book online, meminjam maksimal 3 buku selama 7 hari (perpanjang 1x), mengusulkan buku, membayar denda, dan mengajukan surat bebas pustaka.
+- **Dosen**: sama seperti mahasiswa, dengan batas 10 buku selama 30 hari (perpanjang 2x), tanpa pengajuan bebas pustaka.
+- **Pegawai Perpustakaan**: mengelola buku dan kategori (CRUD), mencatat sirkulasi, memproses usulan, denda, dan bebas pustaka.
+- **Staf Akademik**: mengelola buku, kategori, dan data pengguna.
+
+Untuk mencoba CRUD Buku dan Kategori, login sebagai `jesichaulinahutabarat` atau `stafakademik1`.
+
+Daftar lengkap akun juga ditulis ke `storage/app/akun-demo.csv` setelah seeding.
+
+> Akun dan password ini hanya untuk keperluan demo tugas. Jangan dipakai di lingkungan produksi.
+
 ## Bukti Audit SQL (Eager Loading, tanpa N+1)
 Setiap kueri pada request web dicatat oleh `DB::listen` di `AppServiceProvider` dengan awalan `[SQL AUDIT]`.
 Log dari `storage/logs/laravel.log` saat membuka `/buku` (10 buku per halaman), dengan kueri bawaan sesi, autentikasi, dan notifikasi header tidak ditampilkan:
