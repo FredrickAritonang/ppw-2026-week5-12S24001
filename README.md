@@ -1,76 +1,125 @@
-# SIPUS-Del: Pembangunan Sistem Informasi Perpustakaan Kampus Del
+# SIPUS-Del — Sistem Informasi Perpustakaan Kampus Del (Minggu 5 + Minggu 6)
 
-**Judul Penugasan Mandiri:** Pembangunan Sistem Informasi Perpustakaan Kampus Del (SIPUS-Del): Implementasi Arsitektur MVC Lengkap, Relasi Eloquent Multi-Entitas, Validasi Form Server-Side, dan Audit Kueri Kinerja pada Laravel 11.x
+| | |
+|---|---|
+| **Nama Mahasiswa** | Fredrick Laurensius Aritonang |
+| **NIM** | 12S24001 |
+| **Prodi** | Sistem Informasi |
+| **Mata Kuliah** | Pemrograman dan Pengujian Aplikasi Web |
+| **Dosen** | Chandro Pardede, S.Kom., M.Sc |
 
-Tugas Mandiri Minggu 5, Pemrograman & Pengujian Web (12S3101), Institut Teknologi Del.
-Dibuat dengan Laravel 11 (arsitektur MVC), Eloquent ORM, Blade, dan Bootstrap 5.
-
-**Mahasiswa:** Fredrick Laurensius Aritonang
-**NIM:** 12S24001
-**Prodi:** S1 Sistem Informasi
-
-## Fitur
-- CRUD Buku dan Kategori (`Route::resource`, 7 aksi, Implicit Route Model Binding)
-- Relasi Eloquent multi-entitas (Kategori, Buku, Prodi, Peminjaman, User, Usulan, Notifikasi, Bebas Pustaka), termasuk Kategori hasMany Buku, Buku belongsTo Kategori, dan Buku belongsToMany Prodi
-- Validasi server-side dan proteksi CSRF
-- Layout Blade component `<x-layout>` tema Del Purple (#4C1D95), pagination, flash message, `@forelse`
-- Seeder dan Factory dengan Faker:
-  - `FactoryBukuSeeder` membuat 5 kategori dan 20 buku lewat `Kategori::factory()->has(Buku::factory()->count(4))`
-  - `BukuSeeder` menambah koleksi realistis (30 kategori, sekitar 100 buku, dan data tugas akhir)
-  - `EbookSeeder` menambah 100 e-book terbuka yang dapat dibaca online
-- Audit kueri SQL untuk membuktikan Eager Loading
+Laravel 11, MySQL (InnoDB). Branch pengumpulan Minggu 6: `week6-db-session`.
 
 ## Instalasi
+
 ```bash
 git clone https://github.com/FredrickAritonang/ppw-2026-week5-12S24001.git
 cd ppw-2026-week5-12S24001
+git checkout week6-db-session
 composer install
 copy .env.example .env
 php artisan key:generate
-```
-Buat database MySQL kosong (contoh `week5`), lalu sesuaikan `DB_CONNECTION`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD` di `.env`.
-
-### Jalankan aplikasi
-```bash
 php artisan migrate:fresh --seed
 php artisan serve
 ```
-Buka **http://sipus-del.test:8000**
 
-## Akun Demo (Login)
-Seluruh akun dibuat otomatis oleh `PenggunaSeeder` saat `php artisan migrate:fresh --seed`.
+Buat database kosong di MySQL dan sesuaikan `DB_*` di `.env` sebelum `migrate:fresh --seed`.
+Berkas `.env` dan folder `vendor/` tidak di-commit.
 
-**Password untuk semua akun: `PustakaDel2026`**
+## Akun uji
 
-Username diisi di kolom **Username** pada halaman login. Kolom itu juga menerima nama lengkap akun.
-
-| Peran | Cara menentukan username | Contoh username |
+| Peran | Username atau Email | Password |
 |---|---|---|
-| Mahasiswa | `iss` + 5 digit terakhir NIM (NIM `12S24001` menjadi `iss24001`) | `iss24001` |
-| Dosen | nama tanpa gelar, huruf kecil, tanpa spasi atau titik | pilih dari saran di kolom username |
-| Pegawai Perpustakaan (pustakawan) | nama tanpa gelar, huruf kecil, tanpa spasi | `jesichaulinahutabarat`, `enjelinalimbong`, `yuliasaritripena`, `tiurmalumbangaol` |
-| Staf Akademik | `stafakademik` + nomor | `stafakademik1`, `stafakademik2` |
+| Pustakawan (uji Minggu 6) | `pustakawan@del.ac.id` atau `pustakawan` | `password123` |
+| Mahasiswa | `iss24001` | `PustakaDel2026` |
+| Dosen | `chandropardede` | `PustakaDel2026` |
+| Staf Akademik | `stafakademik1` | `PustakaDel2026` |
 
-Hak akses tiap peran:
-- **Mahasiswa**: mencari katalog dan membaca e-book online, meminjam maksimal 3 buku selama 7 hari (perpanjang 1x), mengusulkan buku, membayar denda, dan mengajukan surat bebas pustaka.
-- **Dosen**: sama seperti mahasiswa, dengan batas 10 buku selama 30 hari (perpanjang 2x), tanpa pengajuan bebas pustaka.
-- **Pegawai Perpustakaan**: mengelola buku dan kategori (CRUD), mencatat sirkulasi, memproses usulan, denda, dan bebas pustaka.
-- **Staf Akademik**: mengelola buku, kategori, dan data pengguna.
+Peminjaman dicatat oleh Pustakawan melalui menu Sirkulasi.
 
-Untuk mencoba CRUD Buku dan Kategori, login sebagai `jesichaulinahutabarat` atau `stafakademik1`.
+## ERD
 
-Daftar lengkap akun juga ditulis ke `storage/app/akun-demo.csv` setelah seeding.
-
-> Akun dan password ini hanya untuk keperluan demo tugas. Jangan dipakai di lingkungan produksi.
-
-## Bukti Audit SQL (Eager Loading, tanpa N+1)
-Setiap kueri pada request web dicatat oleh `DB::listen` di `AppServiceProvider` dengan awalan `[SQL AUDIT]`.
-Log dari `storage/logs/laravel.log` saat membuka `/buku` (10 buku per halaman), dengan kueri bawaan sesi, autentikasi, dan notifikasi header tidak ditampilkan:
+```mermaid
+erDiagram
+    KATEGORIS ||--o{ BUKUS : "hasMany / belongsTo"
+    BUKUS ||--o{ PEMINJAMANS : "hasMany / belongsTo (cascadeOnDelete)"
+    USERS ||--o{ PEMINJAMANS : "nullOnDelete"
+    KATEGORIS {
+        bigint id PK
+        string kode_kategori UK
+        string nama_kategori
+    }
+    BUKUS {
+        bigint id PK
+        string isbn UK
+        string judul
+        bigint kategori_id FK
+        int stok
+    }
+    PEMINJAMANS {
+        bigint id PK
+        string kode_pinjam UK
+        bigint buku_id FK
+        string nim_peminjam
+        string nama_peminjam
+        date tanggal_pinjam
+        date tanggal_jatuh_tempo
+        date tanggal_kembali
+        string status
+    }
 ```
-select count(*) as aggregate from `bukus`
-select * from `bukus` order by `created_at` desc limit 10 offset 0
-select * from `kategoris` where `kategoris`.`id` in (1, 3, 4, 5)
-```
-Hanya 3 kueri untuk daftar buku. Kategori untuk 10 buku diambil dalam satu kueri `in (...)` berkat `Buku::with('kategori')`. Tanpa eager loading, halaman yang sama akan menjalankan 1 kueri tambahan per buku (masalah N+1).
 
-Halaman Bebas Pustaka untuk pustakawan juga bebas N+1: jumlah pinjaman aktif dan denda semua pemohon dihitung sekaligus di controller (`whereIn` + `groupBy`), sehingga View tidak menjalankan kueri.
+## Ringkasan implementasi
+
+| Rubrik | Implementasi |
+|---|---|
+| Migrasi `peminjamans` | `create_peminjamans_table`: FK `buku_id` dengan `cascadeOnDelete`, `kode_pinjam` unik, kolom `status` (`dipinjam` atau `dikembalikan`) |
+| Relasi Eloquent | `Peminjaman` (`$fillable`, `belongsTo(Buku::class)`) dan `Buku` (`hasMany(Peminjaman::class)`) |
+| Transaksi ACID dan locking | `SirkulasiController`: `DB::transaction` dan `Buku::where('id', $id)->lockForUpdate()->firstOrFail()`; stok 0 ditolak; NIM sama dengan buku sama yang belum dikembalikan ditolak; stok dikurangi dengan `decrement` dan dikembalikan dengan `increment`; `QueryException` dicatat dengan `Log::error` |
+| Query Builder | `KatalogController`: `DB::table()` untuk empat statistik, `Buku::with('kategori')->withCount('peminjamans')`, filter `when()` (judul, penulis, ISBN, kategori), `paginate()->withQueryString()` |
+| Sesi dan Cookie | `AuthController`: `Auth::attempt`, `session()->regenerate()` saat login, `invalidate()` dan `regenerateToken()` saat logout; session state (`pencarian_terakhir`, `peminjam_terakhir`, `login_timestamp`); `Cookie::queue` (`del_last_user`, `del_peminjam_terakhir`) |
+| Proteksi rute | Semua rute mutasi (CRUD buku dan kategori, peminjaman, pengembalian) berada di grup middleware `auth` |
+| Seeder | `PustakawanUjiSeeder`, `BukuUjiSeeder` (stok 0 dan stok 1), `TransaksiSeeder` (sampel peminjaman) |
+
+## Bukti pengujian
+
+### 1. Peminjaman berhasil
+Pustakawan mencatat peminjaman ISBN `9780000000002` (stok 1). Kode peminjaman dibuat dan stok berkurang menjadi 0.
+
+![peminjaman berhasil](docs/img/01-pinjam-berhasil.png)
+
+### 2. Pengembalian berhasil, stok bertambah
+Pengembalian mengubah status menjadi `dikembalikan`, mengisi `tanggal_kembali`, dan menambah stok kembali.
+
+![pengembalian berhasil](docs/img/02-kembali-berhasil.png)
+
+### 3. Penolakan stok = 0 (rollback)
+Peminjaman ISBN `9780000000001` (stok 0) ditolak dan transaksi dibatalkan.
+
+![stok nol ditolak](docs/img/03-stok-nol-ditolak.png)
+
+### 4. Stok = 1: peminjam pertama berhasil, peminjam kedua ditolak
+Setelah peminjam pertama mengambil buku terakhir, peminjam kedua ditolak karena stok habis.
+
+![stok satu](docs/img/04-stok-satu.png)
+
+### 5. Audit Cookie HttpOnly (DevTools, Application, Cookies)
+`laravel_session`, `del_last_user`, dan `del_peminjam_terakhir` memiliki HttpOnly dan SameSite `Lax`.
+`XSRF-TOKEN` tidak HttpOnly karena memang harus dapat dibaca JavaScript.
+
+![cookie httponly](docs/img/05-cookie-httponly.png)
+
+### 6. Log error transaksi
+`storage/logs/laravel.log` mencatat `[DB EXCEPTION]` bila `QueryException` terjadi pada peminjaman atau pengembalian.
+
+## Riwayat commit
+
+```
+feat(migration): create peminjamans table with foreign key to bukus
+feat(transaction): implement ACID book borrowing and return with lockForUpdate
+feat(query-builder): add library analytics dashboard and dynamic search
+feat(auth-session): implement librarian login, session regeneration, and cookies
+feat(seeder): add librarian account, zero and one stock books, and sample loans
+style(ui): remove gradients and switch to custom fonts
+docs(readme): add ERD, test accounts, and ACID test evidence
+```
