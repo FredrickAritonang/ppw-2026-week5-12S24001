@@ -13,8 +13,8 @@ Laravel 11, MySQL (InnoDB). Branch pengumpulan Minggu 6: `week6-db-session`.
 ## Instalasi
 
 ```bash
-git clone https://github.com/FredrickAritonang/ppw-2026-week5-12S24001.git
-cd ppw-2026-week5-12S24001
+git clone https://github.com/FredrickAritonang/ppw-2026-week6-12S24001.git
+cd ppw-2026-week6-12S24001
 git checkout week6-db-session
 composer install
 copy .env.example .env
