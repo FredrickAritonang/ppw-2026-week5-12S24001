@@ -28,27 +28,27 @@ Berkas `.env` dan folder `vendor/` tidak di-commit.
 
 ## Akun uji
 
-| Peran | Username atau Email | Password |
+| Peran | Username | Password |
 |---|---|---|
-| Pustakawan (uji Minggu 6) | `pustakawan@del.ac.id` atau `pustakawan` | `password123` |
-| Mahasiswa | `iss24001` | `PustakaDel2026` |
-| Dosen | `chandropardede` | `PustakaDel2026` |
-| Staf Akademik | `stafakademik1` | `PustakaDel2026` |
+| Pustakawan | `pustakawan@del.ac.id` | `password123` |
 
-Peminjaman dicatat oleh Pustakawan melalui menu Sirkulasi.
+Peminjaman dan pengembalian dicatat oleh Pustakawan melalui menu Sirkulasi.
 
 ## ERD
 
 ```mermaid
 erDiagram
-    KATEGORIS ||--o{ BUKUS : "hasMany / belongsTo"
-    BUKUS ||--o{ PEMINJAMANS : "hasMany / belongsTo (cascadeOnDelete)"
-    USERS ||--o{ PEMINJAMANS : "nullOnDelete"
+    direction LR
+    KATEGORIS ||--o{ BUKUS : memiliki
+    BUKUS ||--o{ PEMINJAMANS : dipinjam
+    USERS |o--o{ PEMINJAMANS : mencatat
+
     KATEGORIS {
         bigint id PK
         string kode_kategori UK
         string nama_kategori
     }
+
     BUKUS {
         bigint id PK
         string isbn UK
@@ -56,10 +56,12 @@ erDiagram
         bigint kategori_id FK
         int stok
     }
+
     PEMINJAMANS {
         bigint id PK
         string kode_pinjam UK
         bigint buku_id FK
+        bigint user_id FK
         string nim_peminjam
         string nama_peminjam
         date tanggal_pinjam
@@ -67,7 +69,17 @@ erDiagram
         date tanggal_kembali
         string status
     }
+
+    USERS {
+        bigint id PK
+        string username UK
+        string email UK
+        string password
+        string role
+    }
 ```
+
+Relasi `BUKUS` ke `PEMINJAMANS` memakai `cascadeOnDelete`, sedangkan `USERS` ke `PEMINJAMANS` memakai `nullOnDelete`.
 
 ## Ringkasan implementasi
 
@@ -122,4 +134,6 @@ feat(auth-session): implement librarian login, session regeneration, and cookies
 feat(seeder): add librarian account, zero and one stock books, and sample loans
 style(ui): remove gradients and switch to custom fonts
 docs(readme): add ERD, test accounts, and ACID test evidence
+docs(readme): finalize README and fix screenshot filenames
+docs(readme): simplify test account and redraw ERD
 ```
