@@ -24,53 +24,44 @@ Route::middleware('auth')->group(function () {
     Route::get('/', DashboardController::class)->name('dashboard');
     Route::get('/profil', [ProfilController::class, 'index'])->name('profil.index');
 
-    // Katalog & baca online
     Route::get('/katalog', [KatalogController::class, 'index'])->name('katalog.index');
     Route::get('/katalog/{buku}', [KatalogController::class, 'show'])->name('katalog.show');
     Route::get('/baca/{buku}', [KatalogController::class, 'baca'])->name('katalog.baca');
 
-    // Notifikasi
     Route::get('/notifikasi', [NotifikasiController::class, 'index'])->name('notifikasi.index');
     Route::post('/notifikasi/baca-semua', [NotifikasiController::class, 'bacaSemua'])->name('notifikasi.baca-semua');
     Route::get('/notifikasi/{notifikasi}', [NotifikasiController::class, 'buka'])->name('notifikasi.buka');
 
-    // Riwayat (semua peran)
     Route::get('/riwayat', [SirkulasiController::class, 'riwayat'])->name('riwayat.index');
 
-    // Mahasiswa, dosen, pustakawan
     Route::middleware('role:mahasiswa,dosen,pustakawan')->group(function () {
         Route::get('/sirkulasi', [SirkulasiController::class, 'index'])->name('sirkulasi.index');
-        Route::post('/sirkulasi/{peminjaman}/kembali', [SirkulasiController::class, 'kembali'])->name('sirkulasi.kembali');
+        Route::post('/sirkulasi/{id}/kembali', [SirkulasiController::class, 'kembali'])->whereNumber('id')->name('sirkulasi.kembali');
         Route::post('/sirkulasi/{peminjaman}/perpanjang', [SirkulasiController::class, 'perpanjang'])->name('sirkulasi.perpanjang');
         Route::get('/usulan', [UsulanController::class, 'index'])->name('usulan.index');
         Route::get('/denda', [DendaController::class, 'index'])->name('denda.index');
         Route::post('/denda/{peminjaman}/bayar', [DendaController::class, 'bayar'])->name('denda.bayar');
     });
 
-    // Anggota (mahasiswa & dosen)
     Route::middleware('role:mahasiswa,dosen')->group(function () {
-        Route::post('/sirkulasi/pinjam/{buku}', [SirkulasiController::class, 'pinjam'])->name('sirkulasi.pinjam');
+        Route::post('/sirkulasi/pinjam/{id}', [SirkulasiController::class, 'pinjam'])->whereNumber('id')->name('sirkulasi.pinjam');
         Route::post('/usulan', [UsulanController::class, 'store'])->name('usulan.store');
     });
 
-    // Pegawai perpustakaan
     Route::middleware('role:pustakawan')->group(function () {
         Route::post('/sirkulasi/catat', [SirkulasiController::class, 'catat'])->name('sirkulasi.catat');
         Route::post('/usulan/{usulan}/proses', [UsulanController::class, 'proses'])->name('usulan.proses');
         Route::post('/bebas-pustaka/{bebasPustaka}/proses', [BebasPustakaController::class, 'proses'])->name('bebas-pustaka.proses');
     });
 
-    // Bebas pustaka
     Route::middleware('role:mahasiswa,pustakawan')->group(function () {
         Route::get('/bebas-pustaka', [BebasPustakaController::class, 'index'])->name('bebas-pustaka.index');
         Route::get('/bebas-pustaka/{bebasPustaka}/surat', [BebasPustakaController::class, 'surat'])->name('bebas-pustaka.surat');
     });
     Route::post('/bebas-pustaka', [BebasPustakaController::class, 'ajukan'])->middleware('role:mahasiswa')->name('bebas-pustaka.ajukan');
 
-    // Staf akademik
     Route::get('/pengguna', [PenggunaController::class, 'index'])->middleware('role:staf_akademik')->name('pengguna.index');
 
-    // Pengelolaan data (tugas mandiri: Route::resource)
     Route::resource('buku', BukuController::class)->middleware('role:pustakawan,staf_akademik');
     Route::resource('kategori', KategoriController::class)->middleware('role:pustakawan,staf_akademik');
 });

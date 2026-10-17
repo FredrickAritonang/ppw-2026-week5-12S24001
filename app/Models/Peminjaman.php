@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Str;
 
 class Peminjaman extends Model
 {
@@ -13,19 +14,25 @@ class Peminjaman extends Model
     protected $table = 'peminjamans';
 
     protected $fillable = [
-        'user_id', 'buku_id', 'tgl_pinjam', 'tgl_jatuh_tempo', 'tgl_kembali',
+        'kode_pinjam', 'buku_id', 'user_id', 'nim_peminjam', 'nama_peminjam',
+        'tanggal_pinjam', 'tanggal_jatuh_tempo', 'tanggal_kembali', 'status',
         'jumlah_perpanjang', 'denda_lunas', 'tgl_bayar',
     ];
 
     protected function casts(): array
     {
         return [
-            'tgl_pinjam' => 'date',
-            'tgl_jatuh_tempo' => 'date',
-            'tgl_kembali' => 'date',
+            'tanggal_pinjam' => 'date',
+            'tanggal_jatuh_tempo' => 'date',
+            'tanggal_kembali' => 'date',
             'tgl_bayar' => 'date',
             'denda_lunas' => 'boolean',
         ];
+    }
+
+    public static function buatKode(): string
+    {
+        return 'PJM-'.now()->format('ymd').'-'.strtoupper(Str::random(6));
     }
 
     public function user(): BelongsTo
@@ -40,27 +47,26 @@ class Peminjaman extends Model
 
     public function scopeAktif(Builder $q): Builder
     {
-        return $q->whereNull('tgl_kembali');
+        return $q->where('status', 'dipinjam');
     }
 
-    /** Pinjaman yang terlambat (sudah/belum dikembalikan) sehingga kena denda. */
     public function scopeBerdenda(Builder $q): Builder
     {
         return $q->where(function ($w) {
-            $w->whereColumn('tgl_kembali', '>', 'tgl_jatuh_tempo')
-              ->orWhere(fn ($x) => $x->whereNull('tgl_kembali')->where('tgl_jatuh_tempo', '<', today()));
+            $w->whereColumn('tanggal_kembali', '>', 'tanggal_jatuh_tempo')
+              ->orWhere(fn ($x) => $x->where('status', 'dipinjam')->where('tanggal_jatuh_tempo', '<', today()));
         });
     }
 
     public function getHariTerlambatAttribute(): int
     {
-        $akhir = $this->tgl_kembali ?? today();
+        $akhir = $this->tanggal_kembali ?? today();
 
-        if ($akhir->lte($this->tgl_jatuh_tempo)) {
+        if ($akhir->lte($this->tanggal_jatuh_tempo)) {
             return 0;
         }
 
-        return (int) $this->tgl_jatuh_tempo->diffInDays($akhir, false);
+        return (int) $this->tanggal_jatuh_tempo->diffInDays($akhir, false);
     }
 
     public function getTotalDendaAttribute(): int
@@ -70,6 +76,6 @@ class Peminjaman extends Model
 
     public function getSisaHariAttribute(): int
     {
-        return (int) today()->diffInDays($this->tgl_jatuh_tempo, false);
+        return (int) today()->diffInDays($this->tanggal_jatuh_tempo, false);
     }
 }
