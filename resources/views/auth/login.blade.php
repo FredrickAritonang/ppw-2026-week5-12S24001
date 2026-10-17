@@ -5,16 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Masuk — SIPUS-Del</title>
     <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <style>
         :root { --del:#4C1D95; --biru:#2563EB; --biru-dark:#1D4ED8; }
-        body { font-family:'Poppins',sans-serif; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:1.5rem;
-               background:radial-gradient(circle at 12% 18%,#E9DDFF,transparent 45%),radial-gradient(circle at 88% 82%,#DCEBFF,transparent 45%),#F6F4FB; }
+        body { font-family:'Figtree',sans-serif; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:1.5rem; background:#F2F0F7; }
         .login-box { width:100%; max-width:440px; background:#fff; border:1px solid #E5E0F2; border-radius:.5rem; padding:2rem 2rem 1.8rem; box-shadow:0 22px 55px rgba(76,29,149,.16); }
         .login-box .logo { display:block; max-width:260px; width:100%; margin:0 auto .4rem; }
-        .login-box .inst { text-align:center; color:#5b5575; font-size:.95rem; }
+        .login-box .inst { text-align:center; color:#5b5575; font-size:.95rem; font-family:'Bricolage Grotesque',sans-serif; }
         .login-box hr { border-color:#E9E4F5; opacity:1; margin:1.2rem 0 1.4rem; }
         .lbl { font-weight:700; color:#4b4565; margin:.9rem 0 .35rem; display:block; }
         .form-control { border-radius:.3rem; padding:.7rem .9rem; border-color:#D9D3EA; }
@@ -29,10 +28,12 @@
         <div class="inst">Perpustakaan Institut Teknologi Del</div>
         <hr>
 
+        @if(session('success'))<div class="alert alert-success py-2 small">{{ session('success') }}</div>@endif
+
         <form method="POST" action="{{ route('login.proses') }}">
             @csrf
             <label class="lbl" for="username">Username</label>
-            <input type="text" id="username" name="username" list="daftarAkun" value="{{ old('username') }}" class="form-control @error('username') is-invalid @enderror" autocomplete="off" autofocus required>
+            <input type="text" id="username" name="username" list="daftarAkun" value="{{ old('username', $terakhir ?? '') }}" class="form-control @error('username') is-invalid @enderror" autocomplete="off" autofocus required>
             @error('username')<div class="invalid-feedback">{{ $message }}</div>@enderror
             <datalist id="daftarAkun">
                 @foreach($akunSaran as $a)

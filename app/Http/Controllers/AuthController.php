@@ -5,18 +5,20 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
-    public function showLogin()
+    public function showLogin(Request $request)
     {
         $akunSaran = User::whereIn('role', ['dosen', 'pustakawan'])
             ->orderBy('name')
             ->get(['username', 'name', 'role']);
 
-        return view('auth.login', compact('akunSaran'));
+        $terakhir = $request->cookie('del_last_user');
+
+        return view('auth.login', compact('akunSaran', 'terakhir'));
     }
 
     public function login(Request $request)
@@ -27,18 +29,23 @@ class AuthController extends Controller
         ]);
 
         $input = trim($data['username']);
-        $slug = Str::slug($input, '');
 
         $user = User::where('username', strtolower($input))
-            ->orWhere('username', $slug)
+            ->orWhere('email', strtolower($input))
+            ->orWhere('username', Str::slug($input, ''))
             ->orWhere('name', $input)
             ->first();
 
-        if ($user && Hash::check($data['password'], $user->password)) {
-            Auth::login($user, $request->boolean('remember'));
+        if ($user && Auth::attempt(
+            ['username' => $user->username, 'password' => $data['password']],
+            $request->boolean('remember')
+        )) {
             $request->session()->regenerate();
 
-            return redirect()->intended(route('dashboard'));
+            session(['login_timestamp' => now()->format('d M Y, H:i:s').' WIB']);
+            Cookie::queue('del_last_user', $user->username, 60 * 24 * 7);
+
+            return redirect()->intended(route('dashboard'))->with('success', 'Sesi Anda telah aktif.');
         }
 
         return back()
@@ -52,6 +59,6 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('login');
+        return redirect()->route('login')->with('success', 'Sesi server telah dihapus dengan aman.');
     }
 }
