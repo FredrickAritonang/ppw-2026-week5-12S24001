@@ -8,20 +8,6 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('peminjamans', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('buku_id')->constrained('bukus')->cascadeOnDelete();
-            $table->date('tgl_pinjam');
-            $table->date('tgl_jatuh_tempo');
-            $table->date('tgl_kembali')->nullable();
-            $table->unsignedTinyInteger('jumlah_perpanjang')->default(0);
-            $table->boolean('denda_lunas')->default(false);
-            $table->date('tgl_bayar')->nullable();
-            $table->timestamps();
-            $table->index(['user_id', 'tgl_kembali']);
-        });
-
         Schema::create('usulans', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
@@ -61,6 +47,5 @@ return new class extends Migration
         Schema::dropIfExists('bebas_pustakas');
         Schema::dropIfExists('notifikasis');
         Schema::dropIfExists('usulans');
-        Schema::dropIfExists('peminjamans');
     }
 };
