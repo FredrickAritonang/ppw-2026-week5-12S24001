@@ -1,7 +1,7 @@
 <x-layout title="Denda & Pembayaran" heading="Denda & Pembayaran" :crumbs="['Denda & Pembayaran']">
     <div class="row g-3 mb-3">
         <div class="col-md-6"><div class="stat-card" style="background:#B91C1C"><div><div class="n">Rp {{ number_format($totalBelum, 0, ',', '.') }}</div>Belum Lunas</div><i class="bi bi-cash-coin"></i></div></div>
-        <div class="col-md-6"><div class="stat-card" style="background:#047857"><div><div class="n">Rp {{ number_format($totalLunas, 0, ',', '.') }}</div>Sudah Lunas</div><i class="bi bi-check-circle-fill"></i></div></div>
+        <div class="col-md-6"><div class="stat-card" style="background:#4D7C0F"><div><div class="n">Rp {{ number_format($totalLunas, 0, ',', '.') }}</div>Sudah Lunas</div><i class="bi bi-check-circle-fill"></i></div></div>
     </div>
 
     <div class="panel-box">

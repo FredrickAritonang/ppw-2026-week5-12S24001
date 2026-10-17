@@ -1,6 +1,6 @@
 @props(['buku', 'size' => 'md'])
 @php
-    $warna = ['#4C1D95', '#0369A1', '#047857', '#B45309', '#BE185D', '#B91C1C', '#0F766E', '#1D4ED8'];
+    $warna = ['#0F766E', '#0369A1', '#4D7C0F', '#B45309', '#BE185D', '#B91C1C', '#334155', '#1D4ED8'];
     $bidang = $buku->kategori?->bidang ?? $buku->kategori?->nama_kategori ?? 'Umum';
     $latar = $warna[crc32($bidang) % count($warna)];
 @endphp

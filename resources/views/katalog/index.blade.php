@@ -2,8 +2,8 @@
 <x-layout title="Katalog Buku" heading="Katalog Buku & E-Book" :crumbs="['Katalog Buku & E-Book']">
     <div class="row g-3 mb-3">
         @foreach([
-            ['Total Judul Buku', $statistik['total_judul'], 'bi-journal-bookmark-fill', '#4C1D95'],
-            ['Total Stok Tersedia', $statistik['total_stok'], 'bi-stack', '#0F766E'],
+            ['Total Judul Buku', $statistik['total_judul'], 'bi-journal-bookmark-fill', '#0F766E'],
+            ['Total Stok Tersedia', $statistik['total_stok'], 'bi-stack', '#4D7C0F'],
             ['Sedang Dipinjam', $statistik['sedang_dipinjam'], 'bi-arrow-left-right', '#B45309'],
             ['Total Dikembalikan', $statistik['dikembalikan'], 'bi-check2-circle', '#1D4ED8'],
         ] as [$label, $nilai, $ikon, $warna])

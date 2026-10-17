@@ -9,17 +9,17 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <style>
-        :root { --del:#4C1D95; --biru:#2563EB; --biru-dark:#1D4ED8; }
-        body { font-family:'Figtree',sans-serif; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:1.5rem; background:#F2F0F7; }
-        .login-box { width:100%; max-width:440px; background:#fff; border:1px solid #E5E0F2; border-radius:.5rem; padding:2rem 2rem 1.8rem; box-shadow:0 22px 55px rgba(76,29,149,.16); }
+        :root { --del:#0F766E; --del-dark:#134E4A; }
+        body { font-family:'Figtree',sans-serif; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:1.5rem; background:#F5F4EF; }
+        .login-box { width:100%; max-width:440px; background:#fff; border:1px solid #E4E2D9; border-radius:.5rem; padding:2rem 2rem 1.8rem; box-shadow:0 22px 55px rgba(15,118,110,.16); }
         .login-box .logo { display:block; max-width:260px; width:100%; margin:0 auto .4rem; }
-        .login-box .inst { text-align:center; color:#5b5575; font-size:.95rem; font-family:'Bricolage Grotesque',sans-serif; }
-        .login-box hr { border-color:#E9E4F5; opacity:1; margin:1.2rem 0 1.4rem; }
-        .lbl { font-weight:700; color:#4b4565; margin:.9rem 0 .35rem; display:block; }
-        .form-control { border-radius:.3rem; padding:.7rem .9rem; border-color:#D9D3EA; }
-        .form-control:focus { border-color:var(--biru); box-shadow:0 0 0 .2rem rgba(37,99,235,.18); }
-        .btn-signin { background:var(--biru); color:#fff; border:0; border-radius:.3rem; padding:.65rem 1.8rem; font-weight:600; box-shadow:0 6px 16px rgba(37,99,235,.3); }
-        .btn-signin:hover { color:#fff; background:var(--biru-dark); }
+        .login-box .inst { text-align:center; color:#64706E; font-size:.95rem; font-family:'Bricolage Grotesque',sans-serif; }
+        .login-box hr { border-color:#E4E2D9; opacity:1; margin:1.2rem 0 1.4rem; }
+        .lbl { font-weight:700; color:#14302D; margin:.9rem 0 .35rem; display:block; }
+        .form-control { border-radius:.3rem; padding:.7rem .9rem; border-color:#D5D3C8; }
+        .form-control:focus { border-color:var(--del); box-shadow:0 0 0 .2rem rgba(15,118,110,.18); }
+        .btn-signin { background:var(--del); color:#fff; border:0; border-radius:.3rem; padding:.65rem 1.8rem; font-weight:600; box-shadow:0 6px 16px rgba(15,118,110,.3); }
+        .btn-signin:hover { color:#fff; background:var(--del-dark); }
     </style>
 </head>
 <body>
