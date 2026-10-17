@@ -22,22 +22,18 @@ class TransaksiSeeder extends Seeder
         $b = Buku::where('stok', '>=', 3)->whereNotNull('sampul')->inRandomOrder()->take(8)->get()
             ->concat(Buku::where('stok', '>=', 3)->whereNull('sampul')->inRandomOrder()->take(12)->get())->values();
 
-        // Mahasiswa 1: aktif normal, aktif terlambat, denda belum lunas, tepat waktu, denda lunas
         $this->pinjam($u['iss24001'], $b[0], 3, 7);
         $this->pinjam($u['iss24001'], $b[1], 12, 7);
         $this->pinjam($u['iss24001'], $b[2], 30, 7, 20);
         $this->pinjam($u['iss24001'], $b[3], 60, 7, 55);
         $this->pinjam($u['iss24001'], $b[4], 45, 7, 36, true);
 
-        // Mahasiswa 2 (tanpa tanggungan, siap bebas pustaka)
         $this->pinjam($u['iss24002'], $b[5], 10, 7, 6);
         $this->pinjam($u['iss24002'], $b[6], 5, 7, 3);
 
-        // Mahasiswa 3
         $this->pinjam($u['iss24003'], $b[7], 9, 7);
         $this->pinjam($u['iss24003'], $b[8], 20, 7, 10);
 
-        // Dosen
         $this->pinjam($u['adelinamanurung'], $b[9], 10, 30);
         $this->pinjam($u['adelinamanurung'], $b[10], 25, 30);
         $this->pinjam($u['adelinamanurung'], $b[11], 50, 30, 40);
@@ -67,11 +63,15 @@ class TransaksiSeeder extends Seeder
         $kembali = $kembaliLalu !== null ? today()->subDays($kembaliLalu) : null;
 
         Peminjaman::create([
-            'user_id' => $u->id,
+            'kode_pinjam' => Peminjaman::buatKode(),
             'buku_id' => $b->id,
-            'tgl_pinjam' => $pinjam,
-            'tgl_jatuh_tempo' => $pinjam->copy()->addDays($durasi),
-            'tgl_kembali' => $kembali,
+            'user_id' => $u->id,
+            'nim_peminjam' => substr((string) ($u->nomor_induk ?: $u->username), 0, 20),
+            'nama_peminjam' => $u->name,
+            'tanggal_pinjam' => $pinjam,
+            'tanggal_jatuh_tempo' => $pinjam->copy()->addDays($durasi),
+            'tanggal_kembali' => $kembali,
+            'status' => $kembali ? 'dikembalikan' : 'dipinjam',
             'denda_lunas' => $lunas,
             'tgl_bayar' => $lunas ? $kembali : null,
         ]);
