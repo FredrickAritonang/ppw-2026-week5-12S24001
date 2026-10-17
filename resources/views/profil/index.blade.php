@@ -82,9 +82,9 @@
                         <x-cover :buku="$r->buku" size="sm" />
                         <div class="flex-grow-1">
                             <div class="fw-semibold">{{ $r->buku->judul }}</div>
-                            <div class="small text-muted">{{ $r->tgl_pinjam->translatedFormat('d M Y') }} · jatuh tempo {{ $r->tgl_jatuh_tempo->translatedFormat('d M Y') }}</div>
+                            <div class="small text-muted">{{ $r->tanggal_pinjam->translatedFormat('d M Y') }} · jatuh tempo {{ $r->tanggal_jatuh_tempo->translatedFormat('d M Y') }}</div>
                         </div>
-                        <span class="badge-st {{ $r->tgl_kembali ? 'st-ok' : 'st-info' }}">{{ $r->tgl_kembali ? 'Selesai' : 'Dipinjam' }}</span>
+                        <span class="badge-st {{ $r->tanggal_kembali ? 'st-ok' : 'st-info' }}">{{ $r->tanggal_kembali ? 'Selesai' : 'Dipinjam' }}</span>
                     </div>
                 @empty
                     <div class="text-muted py-4 text-center"><i class="bi bi-inbox fs-1 d-block mb-1"></i>Belum ada riwayat peminjaman.</div>

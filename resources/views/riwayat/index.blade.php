@@ -32,12 +32,12 @@
                             </div>
                         </td>
                         @if($staf)<td>{{ $r->user->name }}<div class="small text-muted">{{ $r->user->peran_data['label'] }}</div></td>@endif
-                        <td>{{ $r->tgl_pinjam->translatedFormat('d M Y') }}</td>
-                        <td>{{ $r->tgl_jatuh_tempo->translatedFormat('d M Y') }}</td>
-                        <td>{{ $r->tgl_kembali?->translatedFormat('d M Y') ?? '-' }}</td>
+                        <td>{{ $r->tanggal_pinjam->translatedFormat('d M Y') }}</td>
+                        <td>{{ $r->tanggal_jatuh_tempo->translatedFormat('d M Y') }}</td>
+                        <td>{{ $r->tanggal_kembali?->translatedFormat('d M Y') ?? '-' }}</td>
                         <td>
-                            @if(! $r->tgl_kembali && $r->hari_terlambat > 0)<span class="badge-st st-bad">Terlambat</span>
-                            @elseif(! $r->tgl_kembali)<span class="badge-st st-info">Dipinjam</span>
+                            @if(! $r->tanggal_kembali && $r->hari_terlambat > 0)<span class="badge-st st-bad">Terlambat</span>
+                            @elseif(! $r->tanggal_kembali)<span class="badge-st st-info">Dipinjam</span>
                             @elseif($r->hari_terlambat > 0)<span class="badge-st st-warn">Kembali terlambat</span>
                             @else<span class="badge-st st-ok">Selesai</span>@endif
                         </td>

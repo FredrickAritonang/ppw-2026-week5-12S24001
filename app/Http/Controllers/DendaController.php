@@ -20,7 +20,7 @@ class DendaController extends Controller
 
         return view('denda.index', [
             'staf' => $staf,
-            'daftar' => $dasar()->with(['buku', 'user'])->latest('tgl_jatuh_tempo')->paginate(10)->withQueryString(),
+            'daftar' => $dasar()->with(['buku', 'user'])->latest('tanggal_jatuh_tempo')->paginate(10)->withQueryString(),
             'totalBelum' => (int) $dasar()->where('denda_lunas', false)->get()->sum('total_denda'),
             'totalLunas' => (int) $dasar()->where('denda_lunas', true)->get()->sum('total_denda'),
         ]);
@@ -31,7 +31,7 @@ class DendaController extends Controller
         $user = Auth::user();
         abort_unless($user->role === 'pustakawan' || $peminjaman->user_id === $user->id, 403);
 
-        if (! $peminjaman->tgl_kembali) {
+        if (! $peminjaman->tanggal_kembali) {
             return back()->with('error', 'Kembalikan buku terlebih dahulu sebelum membayar denda.');
         }
         if ($peminjaman->denda_lunas || $peminjaman->total_denda <= 0) {

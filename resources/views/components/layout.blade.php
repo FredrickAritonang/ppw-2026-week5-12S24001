@@ -10,16 +10,16 @@
     <title>{{ $title ?? 'SIPUS-Del' }} — Perpustakaan IT Del</title>
     <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
     <script>try{if(window.innerWidth>=992&&localStorage.getItem('sidebarCollapsed')==='1')document.documentElement.classList.add('collapsed')}catch(e){}</script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <style>
         :root { --del:#4C1D95; --del-dark:#3B0764; --del-mid:#6D28D9; --del-soft:#F3E8FF; --side:#1E1535; --sidew:268px; }
-        body { font-family:'Poppins',sans-serif; background:#F4F2FA; color:#1f2937; margin:0; }
+        body { font-family:'Figtree',sans-serif; background:#F4F2FA; color:#1f2937; margin:0; }
+        .page-title, .hero h2, .side-brand b, .stat-card .n, .panel-box h6, .cover-title, .notif-head { font-family:'Bricolage Grotesque',sans-serif; }
 
-        /* ===== Sidebar ===== */
         .sidebar { position:fixed; inset:0 auto 0 0; width:var(--sidew); background:var(--side); color:#cfc7e6; overflow-y:auto; overflow-x:hidden; z-index:100; transition:width .25s, transform .25s; }
-        .side-brand { background:linear-gradient(135deg,var(--del-dark),var(--del)); padding:1rem; display:flex; align-items:center; gap:.7rem; min-height:78px; }
+        .side-brand { background:var(--del-dark); padding:1rem; display:flex; align-items:center; gap:.7rem; min-height:78px; }
         .side-brand .pill { background:#fff; border-radius:.6rem; padding:.2rem .5rem; display:flex; }
         .side-brand img { height:36px; }
         .side-brand b { color:#fff; font-weight:800; line-height:1.1; display:block; }
@@ -50,9 +50,8 @@
             html.collapsed .side-label::after { content:''; display:block; border-top:1px solid rgba(255,255,255,.14); }
         }
 
-        /* ===== Area utama ===== */
         .app-main { margin-left:var(--sidew); min-height:100vh; display:flex; flex-direction:column; transition:margin-left .25s; }
-        .topbar { background:linear-gradient(135deg,var(--del-dark),var(--del) 55%,var(--del-mid)); color:#fff; padding:.65rem 1.4rem; display:flex; align-items:center; gap:1rem; position:sticky; top:0; z-index:50; box-shadow:0 2px 14px rgba(0,0,0,.18); }
+        .topbar { background:var(--del); color:#fff; padding:.65rem 1.4rem; display:flex; align-items:center; gap:1rem; position:sticky; top:0; z-index:50; box-shadow:0 2px 14px rgba(0,0,0,.18); }
         .btn-burger { background:none; border:0; color:#fff; font-size:1.6rem; line-height:1; padding:.1rem .3rem; }
         .topsearch { position:relative; flex:1; max-width:420px; }
         .topsearch i { position:absolute; left:.9rem; top:50%; transform:translateY(-50%); color:#8b84a3; }
@@ -69,7 +68,6 @@
         .page-title { color:var(--del); font-weight:700; font-size:1.55rem; padding:1.2rem 1.6rem .2rem; }
         .content { padding:1.2rem 1.6rem 2rem; flex:1; }
 
-        /* Notifikasi */
         .notif-menu { width:360px; max-width:92vw; border-radius:1rem !important; overflow:hidden; }
         .notif-head { padding:.8rem 1rem; font-weight:700; color:var(--del); display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #EEE9F8; }
         .notif-item { display:flex; gap:.8rem; padding:.8rem 1rem; text-decoration:none; color:#1f2937; border-bottom:1px solid #F3EFFA; transition:.15s; }
@@ -80,7 +78,6 @@
         .notif-item .m { font-size:.8rem; color:#6b6585; }
         .notif-item small { color:#9a93b3; font-size:.7rem; }
 
-        /* Panel & info */
         .panel-box { background:#fff; border-radius:1rem; box-shadow:0 4px 16px rgba(76,29,149,.09); padding:1.2rem; margin-bottom:1.2rem; }
         .panel-box h6 { color:var(--del); font-weight:700; border-bottom:2px solid var(--del-soft); padding-bottom:.6rem; margin-bottom:.9rem; }
         .info-row { display:flex; justify-content:space-between; gap:1rem; padding:.5rem 0; border-bottom:1px dashed #E9E4F5; font-size:.85rem; }
@@ -88,10 +85,8 @@
         .info-row span:first-child { color:#8b84a3; flex-shrink:0; }
         .info-row span:last-child { font-weight:600; text-align:right; min-width:0; overflow-wrap:anywhere; }
 
-        /* ===== Sampul buku ===== */
         .cover-box { position:relative; aspect-ratio:2/3; border-radius:.3rem .65rem .65rem .3rem; overflow:hidden; box-shadow:0 12px 26px rgba(30,21,53,.35), 0 2px 4px rgba(0,0,0,.2); container-type:inline-size; background:#4C1D95; flex-shrink:0; }
-        .cover-box::before { content:''; position:absolute; inset:0 auto 0 0; width:6%; background:linear-gradient(90deg,rgba(0,0,0,.35),rgba(255,255,255,.12) 60%,rgba(0,0,0,0)); z-index:3; }
-        .cover-box::after { content:''; position:absolute; inset:0; background:linear-gradient(115deg,rgba(255,255,255,.2),rgba(255,255,255,0) 40%); z-index:3; pointer-events:none; }
+        .cover-box::before { content:''; position:absolute; inset:0 auto 0 0; width:6%; background:rgba(0,0,0,.22); z-index:3; }
         .cover-box img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; background:#fff; z-index:2; }
         .cf { position:absolute; inset:0; padding:12cqw 9cqw 9cqw 14cqw; display:flex; flex-direction:column; color:#fff; }
         .cf-top { font-size:5.2cqw; letter-spacing:.14em; text-transform:uppercase; opacity:.85; font-weight:600; }
@@ -101,7 +96,6 @@
         .cf-pub { margin-top:auto; font-size:4.8cqw; opacity:.8; }
         .cover-sm { width:72px; } .cover-md { width:112px; } .cover-lg { width:100%; } .cover-xl { width:100%; max-width:360px; margin:0 auto; }
 
-        /* Kartu katalog */
         .kat-card { background:#fff; border-radius:1.1rem; padding:1rem; height:100%; display:flex; flex-direction:column; gap:.8rem; box-shadow:0 4px 16px rgba(76,29,149,.08); transition:.25s; }
         .kat-card:hover { transform:translateY(-5px); box-shadow:0 16px 32px rgba(76,29,149,.20); }
         .kat-card .judul { font-weight:600; font-size:.95rem; line-height:1.3; color:#231942; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
@@ -113,7 +107,6 @@
         .stat-card .n { font-size:1.7rem; font-weight:800; line-height:1.1; } .stat-card i { font-size:2.4rem; opacity:.35; }
         .reader-frame { width:100%; height:78vh; border:0; border-radius:.8rem; background:#fff; box-shadow:0 6px 22px rgba(76,29,149,.15); }
 
-        /* Sirkulasi & tabel ringan */
         .loan-row { display:flex; gap:1rem; align-items:center; padding:1rem 0; border-bottom:1px solid #EFEAF8; flex-wrap:wrap; }
         .loan-row:last-child { border-bottom:0; }
         .tbl { width:100%; border-collapse:collapse; font-size:.86rem; }
@@ -123,21 +116,20 @@
         .badge-st { display:inline-block; padding:.28rem .75rem; border-radius:50rem; font-size:.74rem; font-weight:600; }
         .st-ok { background:#DCFCE7; color:#166534; } .st-warn { background:#FEF3C7; color:#92400E; } .st-bad { background:#FEE2E2; color:#991B1B; } .st-info { background:#E0F2FE; color:#0369A1; } .st-grey { background:#EEE; color:#555; }
 
-        /* Gaya halaman Kelola */
-        .hero { position:relative; overflow:hidden; border-radius:1.5rem; padding:2.2rem 2.4rem; margin-bottom:2rem; color:#fff; background:linear-gradient(120deg,var(--del-dark),var(--del) 45%,#7C3AED); box-shadow:0 14px 34px rgba(76,29,149,.30); }
+        .hero { position:relative; overflow:hidden; border-radius:1.5rem; padding:2.2rem 2.4rem; margin-bottom:2rem; color:#fff; background:var(--del); box-shadow:0 14px 34px rgba(76,29,149,.30); }
         .hero::before { content:''; position:absolute; width:320px; height:320px; border-radius:50%; background:rgba(255,255,255,.08); right:-70px; top:-120px; }
         .hero > * { position:relative; z-index:1; } .hero h2 { font-weight:800; margin:0; } .hero p { margin:.3rem 0 0; opacity:.85; }
         .hero-stat { display:inline-flex; align-items:center; gap:.5rem; background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.25); padding:.35rem .9rem; border-radius:50rem; font-size:.85rem; margin-top:.9rem; }
         .btn-hero { background:#fff; color:var(--del); border:0; border-radius:.9rem; padding:.75rem 1.5rem; font-weight:700; box-shadow:0 8px 20px rgba(0,0,0,.2); }
         .btn-hero:hover { background:#FAF5FF; color:var(--del-dark); }
-        .btn-del { background:linear-gradient(135deg,var(--del),var(--del-mid)); color:#fff; border:0; border-radius:.7rem; padding:.55rem 1.2rem; font-weight:500; box-shadow:0 4px 12px rgba(76,29,149,.3); }
-        .btn-del:hover { color:#fff; transform:translateY(-1px); }
+        .btn-del { background:var(--del); color:#fff; border:0; border-radius:.7rem; padding:.55rem 1.2rem; font-weight:500; box-shadow:0 4px 12px rgba(76,29,149,.3); }
+        .btn-del:hover { color:#fff; background:var(--del-dark); transform:translateY(-1px); }
         .btn-del:disabled, .btn-del.disabled { opacity:.5; }
         .text-del { color:var(--del); }
         .book-card { background:#fff; border-radius:1.2rem; overflow:hidden; box-shadow:0 4px 16px rgba(76,29,149,.10); transition:.25s; display:flex; flex-direction:column; }
         .book-card:hover { transform:translateY(-6px); box-shadow:0 18px 36px rgba(76,29,149,.22); }
         .cover { position:relative; padding:1.1rem 1.2rem 1.3rem; min-height:190px; color:#fff; display:flex; flex-direction:column; justify-content:flex-end; overflow:hidden; }
-        .cover::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg,rgba(0,0,0,0) 30%,rgba(0,0,0,.35) 100%); }
+        .cover::after { content:''; position:absolute; inset:0; background:rgba(0,0,0,.18); }
         .cover > * { position:relative; z-index:1; }
         .cover-icon { position:absolute !important; right:-14px; top:10px; font-size:8rem; opacity:.16; transform:rotate(12deg); z-index:0 !important; }
         .cover-top { position:absolute !important; top:1rem; left:1.2rem; right:1.2rem; display:flex; justify-content:space-between; align-items:center; }

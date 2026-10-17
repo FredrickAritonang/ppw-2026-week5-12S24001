@@ -1,7 +1,7 @@
 <x-layout title="Denda & Pembayaran" heading="Denda & Pembayaran" :crumbs="['Denda & Pembayaran']">
     <div class="row g-3 mb-3">
-        <div class="col-md-6"><div class="stat-card" style="background:linear-gradient(135deg,#B91C1C,#F97316)"><div><div class="n">Rp {{ number_format($totalBelum, 0, ',', '.') }}</div>Belum Lunas</div><i class="bi bi-cash-coin"></i></div></div>
-        <div class="col-md-6"><div class="stat-card" style="background:linear-gradient(135deg,#047857,#10B981)"><div><div class="n">Rp {{ number_format($totalLunas, 0, ',', '.') }}</div>Sudah Lunas</div><i class="bi bi-check-circle-fill"></i></div></div>
+        <div class="col-md-6"><div class="stat-card" style="background:#B91C1C"><div><div class="n">Rp {{ number_format($totalBelum, 0, ',', '.') }}</div>Belum Lunas</div><i class="bi bi-cash-coin"></i></div></div>
+        <div class="col-md-6"><div class="stat-card" style="background:#047857"><div><div class="n">Rp {{ number_format($totalLunas, 0, ',', '.') }}</div>Sudah Lunas</div><i class="bi bi-check-circle-fill"></i></div></div>
     </div>
 
     <div class="panel-box">
@@ -18,14 +18,14 @@
                 <div class="flex-grow-1" style="min-width:220px">
                     <div class="fw-semibold">{{ $p->buku->judul }}</div>
                     @if($staf)<div class="small"><i class="bi bi-person-fill"></i> {{ $p->user->name }}</div>@endif
-                    <div class="small text-muted">Jatuh tempo {{ $p->tgl_jatuh_tempo->translatedFormat('d M Y') }} · {{ $p->tgl_kembali ? 'Dikembalikan '.$p->tgl_kembali->translatedFormat('d M Y') : 'Belum dikembalikan' }}</div>
+                    <div class="small text-muted">Jatuh tempo {{ $p->tanggal_jatuh_tempo->translatedFormat('d M Y') }} · {{ $p->tanggal_kembali ? 'Dikembalikan '.$p->tanggal_kembali->translatedFormat('d M Y') : 'Belum dikembalikan' }}</div>
                     <div class="small text-muted">Terlambat {{ $p->hari_terlambat }} hari × Rp1.000</div>
                 </div>
                 <div class="text-end">
                     <div class="fw-bold fs-5">Rp {{ number_format($p->total_denda, 0, ',', '.') }}</div>
                     @if($p->denda_lunas)
                         <span class="badge-st st-ok">Lunas {{ $p->tgl_bayar?->translatedFormat('d M Y') }}</span>
-                    @elseif(! $p->tgl_kembali)
+                    @elseif(! $p->tanggal_kembali)
                         <span class="badge-st st-warn">Kembalikan buku dulu</span>
                     @else
                         <span class="badge-st st-bad">Belum lunas</span>

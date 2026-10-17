@@ -10,7 +10,7 @@
         @if($staf)
             <div class="small mt-1"><i class="bi bi-person-fill"></i> {{ $p->user->name }} <span class="tag tag-info">{{ $p->user->peran_data['label'] }}</span></div>
         @endif
-        <div class="small text-muted mt-1">Dipinjam {{ $p->tgl_pinjam->translatedFormat('d M Y') }} · Jatuh tempo <b>{{ $p->tgl_jatuh_tempo->translatedFormat('d M Y') }}</b> · Diperpanjang {{ $p->jumlah_perpanjang }}x</div>
+        <div class="small text-muted mt-1">Dipinjam {{ $p->tanggal_pinjam->translatedFormat('d M Y') }} · Jatuh tempo <b>{{ $p->tanggal_jatuh_tempo->translatedFormat('d M Y') }}</b> · Diperpanjang {{ $p->jumlah_perpanjang }}x</div>
     </div>
     <div class="text-end">
         @if($terlambat)

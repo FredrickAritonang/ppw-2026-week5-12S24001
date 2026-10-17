@@ -1,13 +1,10 @@
 @props(['buku', 'size' => 'md'])
 @php
-    $warna = [
-        ['#4C1D95', '#7C3AED'], ['#0369A1', '#0EA5E9'], ['#047857', '#34D399'], ['#B45309', '#FBBF24'],
-        ['#BE185D', '#F472B6'], ['#B91C1C', '#FB923C'], ['#0F766E', '#2DD4BF'], ['#1D4ED8', '#60A5FA'],
-    ];
+    $warna = ['#4C1D95', '#0369A1', '#047857', '#B45309', '#BE185D', '#B91C1C', '#0F766E', '#1D4ED8'];
     $bidang = $buku->kategori?->bidang ?? $buku->kategori?->nama_kategori ?? 'Umum';
-    [$c1, $c2] = $warna[crc32($bidang) % count($warna)];
+    $latar = $warna[crc32($bidang) % count($warna)];
 @endphp
-<div class="cover-box cover-{{ $size }}" style="background: linear-gradient(155deg, {{ $c1 }}, {{ $c2 }})">
+<div class="cover-box cover-{{ $size }}" style="background: {{ $latar }}">
     <div class="cf">
         <div class="cf-top">{{ $bidang }}</div>
         <div class="cf-title">{{ $buku->judul }}</div>

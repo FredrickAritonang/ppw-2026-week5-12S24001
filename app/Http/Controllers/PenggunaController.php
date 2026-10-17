@@ -9,7 +9,7 @@ class PenggunaController extends Controller
 {
     public function index(Request $request)
     {
-        $penggunas = User::withCount(['peminjamans as pinjaman_aktif' => fn ($q) => $q->whereNull('tgl_kembali')])
+        $penggunas = User::withCount(['peminjamans as pinjaman_aktif' => fn ($q) => $q->whereNull('tanggal_kembali')])
             ->when($request->role, fn ($q, $v) => $q->where('role', $v))
             ->when($request->q, fn ($q, $v) => $q->where(fn ($w) => $w
                 ->where('name', 'like', "%{$v}%")

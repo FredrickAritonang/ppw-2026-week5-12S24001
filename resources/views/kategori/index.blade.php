@@ -1,12 +1,5 @@
 @php
-    $cover = [
-        'linear-gradient(135deg,#4C1D95,#7C3AED)',
-        'linear-gradient(135deg,#0369A1,#0EA5E9)',
-        'linear-gradient(135deg,#047857,#10B981)',
-        'linear-gradient(135deg,#B45309,#F59E0B)',
-        'linear-gradient(135deg,#BE185D,#EC4899)',
-        'linear-gradient(135deg,#B91C1C,#F97316)',
-    ];
+    $cover = ['#4C1D95', '#0369A1', '#047857', '#B45309', '#BE185D', '#B91C1C'];
 @endphp
 
 <x-layout title="Daftar Kategori">

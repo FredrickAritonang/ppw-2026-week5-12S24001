@@ -16,7 +16,7 @@ class ProfilController extends Controller
             'u' => $u,
             'peran' => Peran::DATA[$u->role],
             'pendidikan' => $this->pendidikan($u->name),
-            'riwayat' => Peminjaman::with('buku.kategori')->where('user_id', $u->id)->latest('tgl_pinjam')->take(10)->get(),
+            'riwayat' => Peminjaman::with('buku.kategori')->where('user_id', $u->id)->latest('tanggal_pinjam')->take(10)->get(),
         ]);
     }
 
