@@ -39,9 +39,9 @@ Peminjaman dan pengembalian dicatat oleh Pustakawan melalui menu Sirkulasi.
 ```mermaid
 erDiagram
     direction LR
-    KATEGORIS ||--o{ BUKUS : memiliki
-    BUKUS ||--o{ PEMINJAMANS : dipinjam
-    USERS |o--o{ PEMINJAMANS : mencatat
+    KATEGORIS ||--o{ BUKUS : ""
+    BUKUS ||--o{ PEMINJAMANS : ""
+    USERS |o--o{ PEMINJAMANS : ""
 
     KATEGORIS {
         bigint id PK
@@ -79,7 +79,11 @@ erDiagram
     }
 ```
 
-Relasi `BUKUS` ke `PEMINJAMANS` memakai `cascadeOnDelete`, sedangkan `USERS` ke `PEMINJAMANS` memakai `nullOnDelete`.
+| Relasi | Kardinalitas | Keterangan |
+|---|---|---|
+| `KATEGORIS` ke `BUKUS` | satu ke banyak | Satu kategori memiliki banyak buku (`hasMany` dan `belongsTo`) |
+| `BUKUS` ke `PEMINJAMANS` | satu ke banyak | Satu buku dapat dipinjam berkali-kali, FK `buku_id` dengan `cascadeOnDelete` |
+| `USERS` ke `PEMINJAMANS` | satu ke banyak, opsional | Pustakawan yang mencatat peminjaman, FK `user_id` dengan `nullOnDelete` |
 
 ## Ringkasan implementasi
 
@@ -136,4 +140,6 @@ style(ui): remove gradients and switch to custom fonts
 docs(readme): add ERD, test accounts, and ACID test evidence
 docs(readme): finalize README and fix screenshot filenames
 docs(readme): simplify test account and redraw ERD
+docs(readme): update clone URL to week6 repository
+docs(readme): clear ERD relation labels and add relation table
 ```
