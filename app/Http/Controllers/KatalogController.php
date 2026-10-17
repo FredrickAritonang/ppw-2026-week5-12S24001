@@ -8,12 +8,18 @@ use App\Models\Peminjaman;
 use App\Models\Prodi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class KatalogController extends Controller
 {
     public function index(Request $request)
     {
+        if ($request->filled('q')) {
+            session(['pencarian_terakhir' => $request->q]);
+        }
+
         $bukus = Buku::with('kategori')
+            ->withCount('peminjamans')
             ->when($request->q, fn ($q, $v) => $q->where(fn ($w) => $w
                 ->where('judul', 'like', "%{$v}%")
                 ->orWhere('penulis', 'like', "%{$v}%")
@@ -27,8 +33,16 @@ class KatalogController extends Controller
             ->paginate(12)
             ->withQueryString();
 
+        $statistik = [
+            'total_judul' => DB::table('bukus')->count(),
+            'total_stok' => (int) DB::table('bukus')->sum('stok'),
+            'sedang_dipinjam' => DB::table('peminjamans')->where('status', 'dipinjam')->count(),
+            'dikembalikan' => DB::table('peminjamans')->where('status', 'dikembalikan')->count(),
+        ];
+
         return view('katalog.index', [
             'bukus' => $bukus,
+            'statistik' => $statistik,
             'bidangs' => Kategori::whereNotNull('bidang')->distinct()->orderBy('bidang')->pluck('bidang'),
             'kategoris' => Kategori::orderBy('bidang')->orderBy('nama_kategori')->get()->groupBy('bidang'),
             'prodis' => Prodi::orderBy('jenjang')->orderBy('nama')->get(),

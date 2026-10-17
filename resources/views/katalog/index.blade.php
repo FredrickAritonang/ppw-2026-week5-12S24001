@@ -1,5 +1,21 @@
 @php $anggota = in_array(auth()->user()->role, ['mahasiswa', 'dosen']); @endphp
 <x-layout title="Katalog Buku" heading="Katalog Buku & E-Book" :crumbs="['Katalog Buku & E-Book']">
+    <div class="row g-3 mb-3">
+        @foreach([
+            ['Total Judul Buku', $statistik['total_judul'], 'bi-journal-bookmark-fill', '#4C1D95'],
+            ['Total Stok Tersedia', $statistik['total_stok'], 'bi-stack', '#0F766E'],
+            ['Sedang Dipinjam', $statistik['sedang_dipinjam'], 'bi-arrow-left-right', '#B45309'],
+            ['Total Dikembalikan', $statistik['dikembalikan'], 'bi-check2-circle', '#1D4ED8'],
+        ] as [$label, $nilai, $ikon, $warna])
+            <div class="col-6 col-xl-3">
+                <div class="stat-card" style="background:{{ $warna }}">
+                    <div><div class="n">{{ number_format($nilai, 0, ',', '.') }}</div><small>{{ $label }}</small></div>
+                    <i class="bi {{ $ikon }}"></i>
+                </div>
+            </div>
+        @endforeach
+    </div>
+
     <form method="GET" class="panel-box">
         <div class="row g-2 align-items-end">
             <div class="col-lg-4">
@@ -57,6 +73,7 @@
                         @if($b->stok == 0)<span class="tag tag-out">Stok habis</span>
                         @elseif($b->stok < 5)<span class="tag tag-low">Sisa {{ $b->stok }}</span>
                         @else<span class="tag tag-info">Tersedia {{ $b->stok }}</span>@endif
+                        <span class="tag"><i class="bi bi-arrow-left-right me-1"></i>Dipinjam {{ $b->peminjamans_count }}×</span>
                     </div>
                     <div class="actions">
                         <a href="{{ route('katalog.show', $b) }}" class="btn-detail">Detail</a>
@@ -64,7 +81,7 @@
                             @if(in_array($b->id, $dipinjam))
                                 <span class="btn btn-sm btn-light border disabled">Dipinjam</span>
                             @elseif($b->stok > 0)
-                                <form method="POST" action="{{ route('sirkulasi.pinjam', $b) }}">@csrf
+                                <form method="POST" action="{{ route('sirkulasi.pinjam', $b->id) }}">@csrf
                                     <button class="btn btn-sm btn-del">Pinjam</button>
                                 </form>
                             @endif
@@ -89,6 +106,12 @@
         <div class="panel-box">
             <h6>Petunjuk</h6>
             <small class="text-muted">Gunakan filter bidang, kategori, dan program studi. Judul berlabel <b>E-Book</b> dapat dibaca online. Tombol <b>Pinjam</b> tersedia untuk mahasiswa dan dosen.</small>
+        </div>
+        <div class="panel-box">
+            <h6>Status Sesi</h6>
+            <div class="info-row"><span>Pencarian terakhir</span><span>{{ session('pencarian_terakhir', '-') }}</span></div>
+            <div class="info-row"><span>Login sejak</span><span>{{ session('login_timestamp', '-') }}</span></div>
+            <div class="info-row"><span>Peminjam terakhir</span><span>{{ session('peminjam_terakhir', '-') }}</span></div>
         </div>
         <div class="panel-box">
             <h6>Program Studi</h6>
